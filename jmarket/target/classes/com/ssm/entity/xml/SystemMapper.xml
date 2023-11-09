@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.mapper.SystemMapper">
+
+    <!-- 注册 -->
+    <insert id="register">
+        INSERT INTO `member` (username,password,email,name,sex,tel,address,type) VALUES (#{username},#{password},#{email},#{name},#{sex},#{tel},#{address},#{type})
+    </insert>
+
+    <!-- 通过用户名查找Member -->
+    <select id="findMemberByUsername" resultType="com.ssm.entity.Member">
+        SELECT id,username,password,type FROM `member` WHERE username=#{username}
+    </select>
+
+    <!-- 通过用户id获取消息列表 -->
+    <select id="findMessageByUserid" resultType="com.ssm.entity.Notices">
+        SELECT * FROM `notices` WHERE userid=#{userid}
+    </select>
+
+    <select id="findMemberById" resultType="com.ssm.entity.Member">
+        SELECT * FROM `member` WHERE id = #{id}
+    </select>
+
+    <update id="updatepassword">
+        UPDATE `member` SET password = #{newpassword} WHERE id=#{id};
+    </update>
+
+    <update id="updateinfo">
+        UPDATE `member` SET password=#{password},  username=#{username}, sex=#{sex}, address=#{address}, tel=#{tel}, email=#{email}, createtime=#{createtime}, name=#{name}  WHERE id =#{id};
+    </update>
+
+    <delete id="deleteNoticesById">
+        DELETE FROM `notices` WHERE id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.mapper.OrderMapper">
+
+    <!-- 购买 -->
+    <insert id="buy" parameterType="com.ssm.entity.Order">
+        INSERT INTO `order` (commid,commname,commdesc,cmuserid,businessname,address,buycount,price,status,orderstatus) VALUES (#{commid},#{commname},#{commdesc},#{cmuserid},#{businessname},#{address},#{buycount},#{price},#{status},#{orderstatus})
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+
+    <!-- 加入购物车 -->
+    <insert id="addToCart">
+        INSERT INTO `order` (commid,commname,commdesc,cmuserid,businessname,address,buycount,price,status,orderstatus) VALUES (#{commid},#{commname},#{commdesc},#{cmuserid},#{businessname},#{address},#{buycount},#{price},#{status},#{orderstatus})
+    </insert>
+
+    <!-- 通过id查找商品 -->
+    <select id="findCommodityById" resultType="com.ssm.entity.Commodity">
+        select commname,thinkmoney from `commodity` where commid=#{id}
+    </select>
+
+    <!-- 通过id查找购物车订单 -->
+    <select id="findCartOrderById" resultType="com.ssm.entity.Order">
+        SELECT  commid,commname  FROM  `order` WHERE commid=#{id} and status=0
+    </select>
+
+    <!-- 通过用户id查找购物车订单列表 -->
+    <select id="findCartOrderListByCmuserid" resultType="com.ssm.entity.Order">
+        select * from `order` where cmuserid=#{id} and status=0
+    </select>
+
+    <!-- 通过用户id查找已购买商品订单列表 -->
+    <select id="findBuyOrderListByCmuserid" resultType="com.ssm.entity.Order">
+        select * from `order` where cmuserid=#{id} and status=1
+    </select>
+
+    <!-- 发送信息给商家 -->
+    <insert id="sendMessageToBusiness">
+        INSERT INTO `notices` (userid,message,ntype,orderid) VALUES (#{userid},#{message},#{ntype},#{orderid})
+    </insert>
+
+    <!-- 通过购物车订单id移除购物车订单 -->
+    <delete id="deleteCartOrderById">
+        DELETE FROM `order` WHERE id = #{id}
+    </delete>
+
+    <select id="findOrderByOrderid" resultType="com.ssm.entity.Order">
+        SELECT * FROM `order` WHERE id = #{id}
+    </select>
+
+    <update id="fahuo">
+        UPDATE `order` SET orderstatus = #{orderstatus} where id = #{id}
+    </update>
+
+
+    <update id="shouhuo">
+        UPDATE `notices` SET userstatus = #{userstatus} where orderid = #{orderid}
+    </update>
+
+    <select id="findNoticeByOrderid" resultType="com.ssm.entity.Notices">
+        SELECT * FROM `notices` WHERE orderid = #{orderid}
+    </select>
+
+
+</mapper>
